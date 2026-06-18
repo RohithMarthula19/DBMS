@@ -236,6 +236,12 @@ async function deposit(accountId, amount, description, initiatedBy) {
        VALUES ($1,$2,$3,'CREDIT','DEPOSIT',$4)`,
       [tx.rows[0].transaction_id, accountId, amount, description]
     );
+    // Double entry balancing leg
+    await db.query(
+      `INSERT INTO journal (transaction_id,account_id,amount,direction,entry_type,description)
+       VALUES ($1,NULL,$2,'DEBIT','DEPOSIT',$3)`,
+      [tx.rows[0].transaction_id, amount, description]
+    );
     await db.query(
       `UPDATE transactions SET status='COMPLETED', completed_at=NOW()
        WHERE transaction_id=$1`,

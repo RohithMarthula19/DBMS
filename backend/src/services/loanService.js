@@ -65,6 +65,14 @@ async function disburseLoan({ accountId, principal, annualRate, tenureMonths, in
        VALUES ($1,$2,$3,'CREDIT','LOAN_DISBURSAL','Loan disbursement')`,
       [tx.rows[0].transaction_id, accountId, principal]
     );
+
+    // Double entry balancing leg (DEBIT from bank)
+    await db.query(
+      `INSERT INTO journal (transaction_id,account_id,amount,direction,entry_type,description)
+       VALUES ($1,NULL,$2,'DEBIT','LOAN_DISBURSAL','Loan disbursement')`,
+      [tx.rows[0].transaction_id, principal]
+    );
+
     await db.query(
       `UPDATE transactions SET status='COMPLETED', completed_at=NOW()
        WHERE transaction_id=$1`,
@@ -112,6 +120,13 @@ async function payEMI(loanId, accountId, initiatedBy) {
       `INSERT INTO journal (transaction_id,account_id,amount,direction,entry_type,description)
        VALUES ($1,$2,$3,'DEBIT','LOAN_EMI','EMI payment')`,
       [tx.rows[0].transaction_id, accountId, emi.emi_amount]
+    );
+
+    // Double entry balancing leg (CREDIT to bank)
+    await db.query(
+      `INSERT INTO journal (transaction_id,account_id,amount,direction,entry_type,description)
+       VALUES ($1,NULL,$2,'CREDIT','LOAN_EMI','EMI payment')`,
+      [tx.rows[0].transaction_id, emi.emi_amount]
     );
 
     await db.query(

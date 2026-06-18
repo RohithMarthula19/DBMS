@@ -13,8 +13,13 @@ router.get('/', auth, async (req, res) => {
     const ids = accs.rows.map(a => a.account_id);
     if (!ids.length) return res.json([]);
     const r = await pool.query(
-      `SELECT * FROM transaction_history
-       WHERE account_id=ANY($1) ORDER BY created_at DESC LIMIT 100`,
+      `SELECT th.*,
+        (SELECT account_id FROM journal j 
+         WHERE j.transaction_id = th.transaction_id 
+         AND j.account_id != th.account_id 
+         LIMIT 1) as counterparty_account
+       FROM transaction_history th
+       WHERE th.account_id=ANY($1) ORDER BY th.created_at DESC LIMIT 100`,
       [ids]
     );
     res.json(r.rows);

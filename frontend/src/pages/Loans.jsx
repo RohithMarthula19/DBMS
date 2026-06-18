@@ -42,11 +42,11 @@ export default function Loans() {
     <div style={{ fontFamily:'sans-serif', background:'#f8fafc', minHeight:'100vh' }}>
       <Navbar />
       <div style={{ padding:24, maxWidth:1100, margin:'0 auto' }}>
-        <h2 style={{ color:'#1e3a5f' }}>🏦 Loan Management</h2>
+        <h2 style={{ color:'#0f172a' }}>🏦 Loan Management</h2>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 2fr', gap:24 }}>
           <div>
             <div style={card}>
-              <h3 style={{ margin:'0 0 16px', color:'#1e3a5f' }}>Apply for Loan</h3>
+              <h3 style={{ margin:'0 0 16px', color:'#0f172a' }}>Apply for Loan</h3>
               <label style={lbl}>Account</label>
               <select onChange={e => setForm({...form, account_id:e.target.value})} style={inp}>
                 {accounts.map(a => <option key={a.account_id} value={a.account_id}>{a.account_type}</option>)}
@@ -61,35 +61,35 @@ export default function Loans() {
             </div>
 
             <div style={{ ...card, marginTop:20 }}>
-              <h3 style={{ margin:'0 0 12px', color:'#1e3a5f' }}>Active Loans</h3>
+              <h3 style={{ margin:'0 0 12px', color:'#0f172a' }}>Active Loans</h3>
               {loans.map(l => (
                 <div key={l.loan_id} style={{ border:'1px solid #e5e7eb', borderRadius:8, padding:12, marginBottom:10 }}>
                   <div style={{ fontSize:13 }}>
                     <strong>₹{parseFloat(l.principal).toLocaleString()}</strong> @ {l.interest_rate}%
                   </div>
-                  <div style={{ fontSize:12, color:'#6b7280', margin:'4px 0' }}>
+                  <div style={{ fontSize:12, color:'#1f2937', margin:'4px 0' }}>
                     EMI: ₹{parseFloat(l.emi_amount).toFixed(2)} | Outstanding: ₹{parseFloat(l.outstanding_principal).toLocaleString()}
                   </div>
-                  <div style={{ fontSize:12, color:'#6b7280' }}>
+                  <div style={{ fontSize:12, color:'#1f2937' }}>
                     Interest paid: ₹{parseFloat(l.total_interest_paid).toFixed(2)}
                   </div>
                   <div style={{ display:'flex', gap:6, marginTop:8 }}>
-                    <button onClick={() => viewSchedule(l.loan_id)} style={{ padding:'4px 10px', fontSize:11, background:'#eff6ff', border:'1px solid #2563eb', borderRadius:4, cursor:'pointer' }}>
+                    <button onClick={() => viewSchedule(l.loan_id)} style={{ padding:'4px 10px', fontSize:11, background:'#eff6ff', border:'1px solid #2563eb', borderRadius:4, cursor:'pointer', color:'#000000', fontWeight:'bold' }}>
                       View Schedule
                     </button>
-                    <button onClick={() => payEMI(l.loan_id, l.account_id)} style={{ padding:'4px 10px', fontSize:11, background:'#dcfce7', border:'1px solid #16a34a', borderRadius:4, cursor:'pointer' }}>
+                    <button onClick={() => payEMI(l.loan_id, l.account_id)} style={{ padding:'4px 10px', fontSize:11, background:'#dcfce7', border:'1px solid #16a34a', borderRadius:4, cursor:'pointer', color:'#000000', fontWeight:'bold' }}>
                       Pay EMI
                     </button>
                   </div>
                 </div>
               ))}
-              {!loans.length && <p style={{ color:'#9ca3af', fontSize:13 }}>No active loans</p>}
+              {!loans.length && <p style={{ color:'#4b5563', fontSize:13 }}>No active loans</p>}
             </div>
           </div>
 
           {schedule.length > 0 && (
             <div style={card}>
-              <h3 style={{ margin:'0 0 16px', color:'#1e3a5f' }}>Amortization Schedule</h3>
+              <h3 style={{ margin:'0 0 16px', color:'#0f172a' }}>Amortization Schedule</h3>
               <div style={{ overflowY:'auto', maxHeight:600 }}>
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
                   <thead>
@@ -127,6 +127,6 @@ export default function Loans() {
 }
 const card = { background:'white', border:'1px solid #e5e7eb', borderRadius:10, padding:20, boxShadow:'0 1px 4px rgba(0,0,0,0.06)' };
 const inp = { display:'block', width:'100%', marginBottom:10, padding:'8px 10px', border:'1px solid #d1d5db', borderRadius:6, boxSizing:'border-box', fontSize:13 };
-const lbl = { fontSize:12, fontWeight:600, color:'#374151', display:'block', marginBottom:4 };
-const btn = { padding:'10px 16px', background:'#1e3a5f', color:'white', border:'none', borderRadius:6, cursor:'pointer', fontSize:13, width:'100%' };
+const lbl = { fontSize:12, fontWeight:700, color:'#000000', display:'block', marginBottom:4 };
+const btn = { padding:'10px 16px', background:'#000000', color:'white', border:'none', borderRadius:6, cursor:'pointer', fontSize:13, width:'100%', fontWeight:'bold' };
 const td = { padding:'8px 10px' };
